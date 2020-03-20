@@ -97,7 +97,7 @@ public class HelloMaven {
 ```
 执行mvn install：
 
-![image](588C5AD6D4AC4D759551ADB64E813E0C)
+![image](../images/mvn_install.png)
 
 项目产生target文件：
 
