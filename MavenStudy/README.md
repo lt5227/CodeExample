@@ -101,7 +101,7 @@ public class HelloMaven {
 
 项目产生target文件：
 
-![image](B1061A73AA244066BC1C630DE757675E)
+![image](../images/maven_target.png)
 
 控制台运行：
 ```
@@ -109,7 +109,7 @@ java -jar MavenStudy-1.0-SNAPSHOT.jar
 ```
 输出如下：
 
-![image](C82864456427426EA0445921D7CC7D26)
+![image](../images/maven_jar1.png)
 
 ## 打包后输出到指定文件利用bat脚本启动
 项目中创建assembly文件夹，创建dev.xml，内容如下：
@@ -326,11 +326,11 @@ java %JAVA_OPTS% -classpath "%CLASSPATH%" com.stackstone.study.maven.HelloMaven
 
 之后mvn install项目，可以看见项目中产生了target目录如下：
 
-![image](E7F9C2C211E446ACA9D4EDB15C2ECD38)
+![image](../images/maven_target2.png)
 
 之后运行startup.bat，控制台输出如下所示：
 
-![image](D44AB20BB0E743D88C31B4FD6EB8002C)
+![image](../images/maven_startup.png)
 
 ***项目例程地址：***
 https://github.com/lt5227/CodeExample/tree/master/MavenStudy
