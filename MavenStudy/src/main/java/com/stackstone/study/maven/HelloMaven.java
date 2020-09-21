@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+/**
+ * @author lilei
+ */
 public class HelloMaven {
     public static void main(String[] args) {
         var str = "Hello Maven";
@@ -13,7 +16,7 @@ public class HelloMaven {
         InputStream inputStream = HelloMaven.class.getClassLoader().getResourceAsStream("demo.yml");
         Yaml yaml = new Yaml();
         for (Object o : yaml.loadAll(inputStream)) {
-            Map map = (Map) o;
+            Map<?, ?> map = (Map<?, ?>) o;
             System.out.println(map);
         }
         try {
