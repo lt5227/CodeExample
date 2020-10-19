@@ -16,6 +16,20 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`rabbitmq_example` /*!40100 DEFAULT CHAR
 
 USE `rabbitmq_example`;
 
+/*Table structure for table `order_record` */
+
+DROP TABLE IF EXISTS `order_record`;
+
+CREATE TABLE `order_record` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(255) NOT NULL COMMENT '订单编号',
+  `order_type` varchar(255) DEFAULT NULL COMMENT '订单类型',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_order_no` (`order_no`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='订单记录表-业务级别';
+
 /*Data for the table `order_record` */
 
 insert  into `order_record`(`id`,`order_no`,`order_type`,`create_time`,`update_time`) values (7,'10010','物流2','2018-07-31 20:59:18','2018-07-31 23:35:43');
@@ -27,6 +41,20 @@ insert  into `order_record`(`id`,`order_no`,`order_type`,`create_time`,`update_t
 insert  into `order_record`(`id`,`order_no`,`order_type`,`create_time`,`update_time`) values (15,'10016','测试类型4','2018-07-30 20:53:39','2018-07-31 23:34:47');
 insert  into `order_record`(`id`,`order_no`,`order_type`,`create_time`,`update_time`) values (16,'orderNo_20180821001','物流12','2018-08-22 21:12:46',NULL);
 
+/*Table structure for table `order_report` */
+
+DROP TABLE IF EXISTS `order_report`;
+
+CREATE TABLE `order_report` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(255) NOT NULL COMMENT '订单编号',
+  `order_type` varchar(255) DEFAULT NULL COMMENT '订单类型',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_order_no` (`order_no`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COMMENT='订单报表表-分析级别';
+
 /*Data for the table `order_report` */
 
 insert  into `order_report`(`id`,`order_no`,`order_type`,`create_time`,`update_time`) values (28,'10010','物流2','2018-07-31 20:59:18','2018-07-31 23:35:43');
@@ -34,9 +62,37 @@ insert  into `order_report`(`id`,`order_no`,`order_type`,`create_time`,`update_t
 insert  into `order_report`(`id`,`order_no`,`order_type`,`create_time`,`update_time`) values (30,'10015','测试类型3','2018-07-23 21:06:30','2018-07-31 23:34:45');
 insert  into `order_report`(`id`,`order_no`,`order_type`,`create_time`,`update_time`) values (31,'10016','测试类型4','2018-07-30 20:53:39','2018-07-31 23:34:47');
 
+/*Table structure for table `product` */
+
+DROP TABLE IF EXISTS `product`;
+
+CREATE TABLE `product` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_no` varchar(255) DEFAULT NULL COMMENT '商品编号',
+  `total` int(255) DEFAULT NULL COMMENT '库存量',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='商品信息表';
+
 /*Data for the table `product` */
 
 insert  into `product`(`id`,`product_no`,`total`,`create_time`,`update_time`) values (1,'product_10010',1000,'2018-08-24 21:16:20','2018-08-25 17:59:57');
+
+/*Table structure for table `product_bak` */
+
+DROP TABLE IF EXISTS `product_bak`;
+
+CREATE TABLE `product_bak` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `stock` int(11) DEFAULT NULL COMMENT '库存量',
+  `purchase_date` date DEFAULT NULL COMMENT '采购日期',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_active` int(11) DEFAULT '1' COMMENT '是否有效',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COMMENT='产品信息表';
 
 /*Data for the table `product_bak` */
 
@@ -66,12 +122,56 @@ insert  into `product_bak`(`id`,`name`,`stock`,`purchase_date`,`create_time`,`up
 insert  into `product_bak`(`id`,`name`,`stock`,`purchase_date`,`create_time`,`update_time`,`is_active`) values (24,'联想笔记本1010',152,'2018-01-01','2018-07-30 21:55:05','2018-07-30 21:55:45',0);
 insert  into `product_bak`(`id`,`name`,`stock`,`purchase_date`,`create_time`,`update_time`,`is_active`) values (25,'外星人第四代',152,'2018-03-01','2018-07-30 21:58:20','2018-07-30 22:00:08',0);
 
+/*Table structure for table `product_robbing_record` */
+
+DROP TABLE IF EXISTS `product_robbing_record`;
+
+CREATE TABLE `product_robbing_record` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mobile` varchar(255) DEFAULT NULL COMMENT '手机号',
+  `product_id` int(11) DEFAULT NULL COMMENT '产品Id',
+  `robbing_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '抢单时间',
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='抢单记录表';
+
 /*Data for the table `product_robbing_record` */
+
+/*Table structure for table `user` */
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(255) DEFAULT NULL COMMENT '用户名',
+  `password` varchar(255) DEFAULT NULL COMMENT '密码',
+  `sex` int(11) DEFAULT NULL COMMENT '性别（1=男；2=女）',
+  `is_active` int(11) DEFAULT '1' COMMENT '是否有效（1=是；0=否）',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_user_name` (`user_name`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='用户信息表';
 
 /*Data for the table `user` */
 
 insert  into `user`(`id`,`user_name`,`password`,`sex`,`is_active`,`create_time`,`update_time`) values (1,'debug','linsen',1,1,'2018-07-22 16:48:25',NULL);
 insert  into `user`(`id`,`user_name`,`password`,`sex`,`is_active`,`create_time`,`update_time`) values (2,'jack','123456',1,1,'2018-07-22 16:48:36',NULL);
+
+/*Table structure for table `user_log` */
+
+DROP TABLE IF EXISTS `user_log`;
+
+CREATE TABLE `user_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(255) NOT NULL COMMENT '用户名',
+  `module` varchar(255) DEFAULT NULL COMMENT '模块类型',
+  `operation` varchar(255) DEFAULT NULL COMMENT '操作',
+  `data` varchar(1000) DEFAULT NULL COMMENT '操作数据',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='用户操作日志';
 
 /*Data for the table `user_log` */
 
@@ -81,6 +181,20 @@ insert  into `user_log`(`id`,`user_name`,`module`,`operation`,`data`,`create_tim
 insert  into `user_log`(`id`,`user_name`,`module`,`operation`,`data`,`create_time`,`update_time`) values (4,'debug','Login','login','{\"id\":1,\"userName\":\"debug\",\"password\":\"linsen\",\"sex\":1,\"isActive\":1,\"createTime\":1532249305000,\"updateTime\":null}','2018-09-01 09:26:54',NULL);
 insert  into `user_log`(`id`,`user_name`,`module`,`operation`,`data`,`create_time`,`update_time`) values (5,'debug','Login','login','{\"id\":1,\"userName\":\"debug\",\"password\":\"linsen\",\"sex\":1,\"isActive\":1,\"createTime\":1532249305000,\"updateTime\":null}','2018-09-01 09:28:03',NULL);
 insert  into `user_log`(`id`,`user_name`,`module`,`operation`,`data`,`create_time`,`update_time`) values (6,'debug','Login','login','{\"id\":1,\"userName\":\"debug\",\"password\":\"linsen\",\"sex\":1,\"isActive\":1,\"createTime\":1532249305000,\"updateTime\":null}','2018-09-01 09:29:29',NULL);
+
+/*Table structure for table `user_order` */
+
+DROP TABLE IF EXISTS `user_order`;
+
+CREATE TABLE `user_order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(255) NOT NULL COMMENT '订单编号',
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `status` int(11) DEFAULT NULL COMMENT '状态(1=已保存；2=已付款；3=已取消)',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '下单时间',
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='用户订单表';
 
 /*Data for the table `user_order` */
 
