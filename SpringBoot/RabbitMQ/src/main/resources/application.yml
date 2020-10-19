@@ -28,3 +28,12 @@ spring:
     port: 5672
     username: guest
     password: guest
+
+swagger:
+  name: spring boot rabbitmq example project
+  title: spring boot rabbitmq example interface
+  author: stackstone
+  url: ...
+  email: ...
+  description: spring boot rabbitmq example project
+  version: 1.0.0
