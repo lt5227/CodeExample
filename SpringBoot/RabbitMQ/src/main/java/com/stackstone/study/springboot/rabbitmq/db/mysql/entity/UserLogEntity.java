@@ -2,6 +2,8 @@ package com.stackstone.study.springboot.rabbitmq.db.mysql.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -20,6 +22,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "user_log")
 @Data
+@NoArgsConstructor
 public class UserLogEntity {
 
     @Id
@@ -42,9 +45,17 @@ public class UserLogEntity {
 
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "create_time")
+    @CreationTimestamp
     private LocalDateTime createTime;
 
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "update_time")
     private LocalDateTime updateTime;
+
+    public UserLogEntity(String userName, String module, String operation, String data) {
+        this.userName = userName;
+        this.module = module;
+        this.operation = operation;
+        this.data = data;
+    }
 }

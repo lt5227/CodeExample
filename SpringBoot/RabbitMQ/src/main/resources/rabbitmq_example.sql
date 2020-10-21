@@ -1,6 +1,6 @@
 /*
 SQLyog Ultimate v12.5.0 (64 bit)
-MySQL - 5.7.28-log : Database - rabbitmq_example
+MySQL - 5.7.28-logDTO : Database - rabbitmq_example
 *********************************************************************
 */
 
@@ -137,11 +137,11 @@ CREATE TABLE `product_robbing_record` (
 
 /*Data for the table `product_robbing_record` */
 
-/*Table structure for table `user` */
+/*Table structure for table `userDTO` */
 
-DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `userDTO`;
 
-CREATE TABLE `user` (
+CREATE TABLE `userDTO` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_name` varchar(255) DEFAULT NULL COMMENT '用户名',
   `password` varchar(255) DEFAULT NULL COMMENT '密码',
@@ -153,10 +153,10 @@ CREATE TABLE `user` (
   UNIQUE KEY `idx_user_name` (`user_name`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='用户信息表';
 
-/*Data for the table `user` */
+/*Data for the table `userDTO` */
 
-insert  into `user`(`id`,`user_name`,`password`,`sex`,`is_active`,`create_time`,`update_time`) values (1,'debug','linsen',1,1,'2018-07-22 16:48:25',NULL);
-insert  into `user`(`id`,`user_name`,`password`,`sex`,`is_active`,`create_time`,`update_time`) values (2,'jack','123456',1,1,'2018-07-22 16:48:36',NULL);
+insert  into `userDTO`(`id`,`user_name`,`password`,`sex`,`is_active`,`create_time`,`update_time`) values (1,'debug','linsen',1,1,'2018-07-22 16:48:25',NULL);
+insert  into `userDTO`(`id`,`user_name`,`password`,`sex`,`is_active`,`create_time`,`update_time`) values (2,'jack','123456',1,1,'2018-07-22 16:48:36',NULL);
 
 /*Table structure for table `user_log` */
 

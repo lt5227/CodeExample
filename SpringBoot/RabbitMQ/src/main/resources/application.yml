@@ -2,6 +2,25 @@ server:
   port: 9092
 
 spring:
+  # 邮箱配置
+  mail:
+    host: smtp.qq.com
+    port:
+    username: lt5227@qq.com
+    password: novwpwlqgvvlbdgc
+    protocol: smtp
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+      mail.smtp.socketFactory.port: 465
+      mail.smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
+      mail.smtp.socketFactory.fallback: false
+  # 服务模块
+  devtools:
+    restart:
+      # 热部署开关
+      enabled: true
   datasource:
     url: jdbc:mysql://localhost:3306/rabbitmq_example?useUnicode=true&rewriteBatchedStatements=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&autoReconnectForPools=true&failOverReadOnly=false&useSSL=false&serverTimezone=America/Los_Angeles&allowMultiQueries=true
     username: root
@@ -21,13 +40,74 @@ spring:
       hibernate.order_inserts: true
       hibernate.order_updates: true
       hibernate.jdbc.batch_size: 1000
-  # RabbitMq
+  # RabbitMq 基础配置
   rabbitmq:
     virtual-host: /
     host: 127.0.0.1
     port: 5672
     username: guest
     password: guest
+    listener:
+      simple:
+        concurrency: 10
+        max-concurrency: 20
+        prefetch: 5
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.engine.QueryParameters: debug
+    org.hibernate.engine.query.HQLQueryPlan: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+mq:
+# 基础队列
+  basic:
+    info:
+      exchange: local:mq:basic:info:exchange
+      routingKey: local:mq:basic:info:routingKey
+      queue: local:mq:basic:info:queue
+# 抢单队列
+  robbing:
+    info:
+      exchange: local:mq:robbing:info:exchange
+      routingKey: local:mq:robbing:info:routingKey
+      queue: local:mq:robbing:info:queue
+# 消息确认和并发处理队列
+  ackConcurrent:
+    info:
+      exchange: local:mq:ackConcurrent:info:exchange
+      routingKey: local:mq:ackConcurrent:info:routingKey
+      queue: local:mq:ackConcurrent:info:queue
+  userOrder:
+    info:
+      exchange: local:mq:userOrder:info:exchange
+      routingKey: local:mq:userOrder:info:routingKey
+      queue: local:mq:userOrder:info:queue
+  log:
+    info:
+      exchange: local:mq:log:info:exchange
+      routingKey: local:mq:log:info:routingKey
+      queue: local:mq:log:info:queue
+  userLog:
+    info:
+      exchange: local:mq:userLog:info:exchange
+      routingKey: local:mq:userLog:info:routingKey
+      queue: local:mq:userLog:info:queue
+  mail:
+    info:
+      exchange: local:mq:mail:info:exchange
+      routingKey: local:mq:mail:info:routingKey
+      queue: local:mq:mail:info:queue
+  deadQueue:
+    simple:
+      produce:
+        exchange: local:deadQueue:simple:produce:exchange
+        routingKey: local:deadQueue:simple:produce:routingKey
+        queue: local:deadQueue:simple:produce:queue
+      deadVirtual:
+        exchange: local:deadQueue:simple:deadVirtual:exchange
+        routingKey: local:deadQueue:simple:deadVirtual:routingKey
+        queue: local:deadQueue:simple:deadVirtual:queue
 
 swagger:
   name: spring boot rabbitmq example project

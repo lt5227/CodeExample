@@ -2,6 +2,7 @@ package com.stackstone.study.springboot.rabbitmq.listener.event;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.context.ApplicationEvent;
  */
 @Getter
 @Setter
+@ToString
 public class PushOrderRecordEvent extends ApplicationEvent {
 
     private String orderNo;

@@ -5,12 +5,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * Copyright 2020 Oriental Standard All rights reserved.
+ * SwaggerProperties.java
  *
- * @author: LiLei
- * @className: SwaggerProperties
- * @createTime: 2020/10/19 11:52
- * @description: TODO
+ * <p>Copyright (c) 2020 StackStone All rights reserved.</p>
+ *
+ * @author LiLei
+ * @version 1.0.0
+ * @date 2020-10-20 10:43:40
+ * @since 1.0.0
  */
 @Component
 @ConfigurationProperties(prefix = "swagger")
