@@ -117,6 +117,15 @@ mq:
         exchange: local:deadQueue:userOrder:deadVirtual:exchange
         routingKey: local:deadQueue:userOrder:deadVirtual:routingKey
         queue: local:deadQueue:userOrder:deadVirtual:queue
+    dynamic:
+      produce:
+        exchange: local:deadQueue:dynamic:produce:exchange
+        routingKey: local:deadQueue:dynamic:produce:routingKey
+        queue: local:deadQueue:dynamic:produce:queue
+      deadVirtual:
+        exchange: local:deadQueue:dynamic:deadVirtual:exchange
+        routingKey: local:deadQueue:dynamic:deadVirtual:routingKey
+        queue: local:deadQueue:dynamic:deadVirtual:queue
 swagger:
   name: spring boot rabbitmq example project
   title: spring boot rabbitmq example interface

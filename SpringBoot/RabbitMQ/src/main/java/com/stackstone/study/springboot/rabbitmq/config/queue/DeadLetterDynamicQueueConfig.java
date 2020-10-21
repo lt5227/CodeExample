@@ -14,18 +14,18 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * UserOrderTimeOutDeadQueueConfig
- * 用户下单支付超时死信队列模型
+ * DeadLetterDynamicQueueConfig
+ * 死信队列动态设置TTL消息模型
  *
  * <p>Copyright (c) 2020 Oriental Standard All rights reserved.</p>
  *
  * @author LiLei
  * @version 1.0.0
- * @date 2020 /10/21 22:47
+ * @date 2020/10/21 23:08
  * @since 1.0.0
  */
 @Configuration
-public class UserOrderDeadLetterQueueConfig {
+public class DeadLetterDynamicQueueConfig {
     @Autowired
     private Environment env;
 
@@ -42,12 +42,12 @@ public class UserOrderDeadLetterQueueConfig {
      * @return the queue
      */
     @Bean
-    public Queue userOrderDeadQueue() {
+    public Queue dynamicDeadQueue() {
         Map<String, Object> args = new HashMap<>(3);
-        args.put("x-dead-letter-exchange", env.getProperty("mq.deadQueue.userOrder.deadVirtual.exchange"));
-        args.put("x-dead-letter-routing-key", env.getProperty("mq.deadQueue.userOrder.deadVirtual.routingKey"));
+        args.put("x-dead-letter-exchange", env.getProperty("mq.deadQueue.dynamic.deadVirtual.exchange"));
+        args.put("x-dead-letter-routing-key", env.getProperty("mq.deadQueue.dynamic.deadVirtual.routingKey"));
         args.put("x-message-ttl", 10000);
-        return new Queue(Objects.requireNonNull(env.getProperty("mq.deadQueue.userOrder.deadVirtual.queue")),
+        return new Queue(Objects.requireNonNull(env.getProperty("mq.deadQueue.dynamic.deadVirtual.queue")),
                 true, false, false, args);
     }
 
@@ -59,8 +59,8 @@ public class UserOrderDeadLetterQueueConfig {
      * @return the topic exchange
      */
     @Bean
-    public TopicExchange userOrderDeadExchange() {
-        return new TopicExchange(env.getProperty("mq.deadQueue.userOrder.produce.exchange"),
+    public TopicExchange dynamicDeadExchange() {
+        return new TopicExchange(env.getProperty("mq.deadQueue.dynamic.produce.exchange"),
                 true, false);
     }
 
@@ -70,10 +70,10 @@ public class UserOrderDeadLetterQueueConfig {
      * @return the binding
      */
     @Bean
-    public Binding userOrderDeadBinding() {
-        return BindingBuilder.bind(userOrderDeadQueue())
-                .to(userOrderDeadExchange())
-                .with(env.getProperty("mq.deadQueue.userOrder.produce.routingKey"));
+    public Binding dynamicDeadBinding() {
+        return BindingBuilder.bind(dynamicDeadQueue())
+                .to(dynamicDeadExchange())
+                .with(env.getProperty("mq.deadQueue.dynamic.produce.routingKey"));
     }
 
 
@@ -85,8 +85,8 @@ public class UserOrderDeadLetterQueueConfig {
      * @return the queue
      */
     @Bean
-    public Queue userOrderDeadRealQueue() {
-        return new Queue(Objects.requireNonNull(env.getProperty("mq.deadQueue.userOrder.produce.queue")), true);
+    public Queue dynamicDeadRealQueue() {
+        return new Queue(Objects.requireNonNull(env.getProperty("mq.deadQueue.dynamic.produce.queue")), true);
     }
 
     /**
@@ -95,8 +95,8 @@ public class UserOrderDeadLetterQueueConfig {
      * @return the topic exchange
      */
     @Bean
-    public TopicExchange userOrderDeadRealExchange() {
-        return new TopicExchange(env.getProperty("mq.deadQueue.userOrder.deadVirtual.exchange"),
+    public TopicExchange dynamicDeadRealExchange() {
+        return new TopicExchange(env.getProperty("mq.deadQueue.dynamic.deadVirtual.exchange"),
                 true, false);
     }
 
@@ -106,8 +106,8 @@ public class UserOrderDeadLetterQueueConfig {
      * @return the binding
      */
     @Bean
-    public Binding userOrderDeadRealBinding() {
-        return BindingBuilder.bind(userOrderDeadRealQueue()).to(userOrderDeadRealExchange())
-                .with(env.getProperty("mq.deadQueue.userOrder.deadVirtual.routingKey"));
+    public Binding dynamicDeadRealBinding() {
+        return BindingBuilder.bind(dynamicDeadRealQueue()).to(dynamicDeadRealExchange())
+                .with(env.getProperty("mq.deadQueue.dynamic.deadVirtual.routingKey"));
     }
 }

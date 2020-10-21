@@ -119,4 +119,38 @@ public class UserOrderController {
         });
         return response;
     }
+
+    /**
+     * 死信队列样例
+     * Push user order by dead letter base response.
+     *
+     * @param dto the dto
+     * @return the base response
+     */
+    @PostMapping(PREFIX + "/push/dead/queue/dynamicTTL")
+    @ApiOperation(value = "推送用户订单(死信队列 动态TTL演示)", notes = "推送用户订单(死信队列 动态TTL演示)")
+    public BaseResponse<String> pushUserOrderByDeadLetterDynamicTTL(@RequestBody UserOrderDTO dto) {
+        BaseResponse<String> response = new BaseResponse<>(StatusCodeEnum.SUCCESS);
+        UserOrderEntity userOrderEntity = new UserOrderEntity();
+        BeanUtils.copyProperties(dto, userOrderEntity);
+        userOrderEntity.setCreateTime(LocalDateTime.now());
+        userOrderEntity.setStatus(1);
+        userOrderRepository.save(userOrderEntity);
+        rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
+        rabbitTemplate.setExchange(env.getProperty("mq.deadQueue.dynamic.produce.exchange"));
+        rabbitTemplate.setRoutingKey(Objects.requireNonNull(
+                env.getProperty("mq.deadQueue.dynamic.produce.routingKey"))
+        );
+        // 可以用随机数代替
+        Long ttl = 6000L;
+        rabbitTemplate.convertAndSend(userOrderEntity.getId(), message -> {
+            MessageProperties properties = message.getMessageProperties();
+            properties.setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+            properties.setHeader(AbstractJavaTypeMapper.DEFAULT_CONTENT_CLASSID_FIELD_NAME, Integer.class);
+
+            properties.setExpiration(String.valueOf(ttl));
+            return message;
+        });
+        return response;
+    }
 }

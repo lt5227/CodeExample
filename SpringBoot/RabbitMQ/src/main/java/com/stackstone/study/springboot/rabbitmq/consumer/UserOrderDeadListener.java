@@ -9,7 +9,6 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 /**
  * UserOrderDeadListener
@@ -37,6 +36,15 @@ public class UserOrderDeadListener {
             userOrderRepository.save(userOrderEntity);
         } else {
             // 已支付-可能需要异步发送其他日志信息
+        }
+    }
+
+    @RabbitListener(queues = "${mq.deadQueue.dynamic.produce.queue}",containerFactory = "multiListenerContainer")
+    public void consumeMessageDynamic(@Payload Integer id){
+        try {
+            log.info("死信队列-动态TTL-用户下单超时未支付监听消息： {} ",id);
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }
