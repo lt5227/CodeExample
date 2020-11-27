@@ -19,6 +19,10 @@ import java.time.LocalDateTime;
 @Slf4j
 public class SimpleJob implements Job {
 
+    public SimpleJob() {
+        System.out.println("SimpleJob...");
+    }
+
     /**
      * <p>
      * Called by the <code>{@link org.quartz.Scheduler}</code> when a

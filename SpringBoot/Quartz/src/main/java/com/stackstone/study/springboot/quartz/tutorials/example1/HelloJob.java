@@ -27,6 +27,7 @@ public class HelloJob implements Job {
      * </p>
      */
     public HelloJob() {
+        System.out.println("HelloJob...");
     }
 
     /**
