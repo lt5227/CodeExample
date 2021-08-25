@@ -22,7 +22,7 @@ class HystrixDemoTest {
     @Test
     void testDemoCommand() throws InterruptedException {
         long start = System.currentTimeMillis();
-        Integer integer = new DemoCommand(provider).execute();
+        Integer integer = new DemoCommand(provider, null).execute();
         long end = System.currentTimeMillis();
         log.info("result: {}, time: {}", integer, (end - start));
         Thread.sleep(15000L);
