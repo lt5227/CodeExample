@@ -2,6 +2,8 @@ package com.stackstone.study.hystrix.demo;
 
 import com.netflix.hystrix.*;
 import lombok.extern.slf4j.Slf4j;
+import rx.Observable;
+import rx.functions.Action0;
 
 /**
  * Copyright 2021 PatSnap All rights reserved.
@@ -16,9 +18,9 @@ public class DemoCommand extends HystrixCommand<Integer> {
 
     private final DemoServiceProvider demoServiceProvider;
 
-    private final String a;
+    private final String key;
 
-    public DemoCommand(DemoServiceProvider provider, String a) {
+    public DemoCommand(DemoServiceProvider provider, String key) {
         super(Setter
                 .withGroupKey(HystrixCommandGroupKey.Factory.asKey("demoService"))
                 .andCommandKey(HystrixCommandKey.Factory.asKey("queryDocumentCount"))
@@ -33,20 +35,59 @@ public class DemoCommand extends HystrixCommand<Integer> {
                                 .withCircuitBreakerErrorThresholdPercentage(50)
                                 .withExecutionTimeoutEnabled(true)
                                 // 执行超时时间
-                                .withExecutionTimeoutInMilliseconds(5000)
+                                .withExecutionTimeoutInMilliseconds(1000)
                 )
                 .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter().withCoreSize(2)));
         this.demoServiceProvider = provider;
-        this.a = a;
+        this.key = key;
     }
 
     @Override
     protected Integer run() throws Exception {
-        return demoServiceProvider.queryDocumentCount(a);
+        int result;
+        try {
+            result = demoServiceProvider.queryDocumentCount(key);
+        } finally {
+            demoServiceProvider.close();
+        }
+        return result;
     }
 
     @Override
     protected Integer getFallback() {
+        log.info("熔断");
         return -1;
+    }
+
+    @Override
+    public Observable<Integer> observe() {
+        return super.observe().doOnTerminate(new Action0() {
+            @Override
+            public void call() {
+                log.info("456");
+            }
+        });
+    }
+
+    @Override
+    public Observable<Integer> toObservable() {
+        return super.toObservable().doOnUnsubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        log.info("12345678");
+                    }
+                })
+                .doOnTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        log.info("789");
+                    }
+                })
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        log.info("123");
+                    }
+                });
     }
 }

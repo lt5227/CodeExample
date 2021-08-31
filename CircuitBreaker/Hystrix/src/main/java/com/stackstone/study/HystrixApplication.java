@@ -1,4 +1,4 @@
-package com.stackstone.study.hystrix;
+package com.stackstone.study;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

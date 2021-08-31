@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import rx.Observer;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -25,24 +26,42 @@ public class DemoController {
     private DemoServiceProvider provider;
 
     @GetMapping("/test")
-    public String test() throws InterruptedException {
+    public String test(String key) throws InterruptedException {
         long start = System.currentTimeMillis();
-        DemoCommand demoCommand = new DemoCommand(provider, null);
+        DemoCommand demoCommand = new DemoCommand(provider, key);
         Integer integer = demoCommand.execute();
         long end = System.currentTimeMillis();
         log.info("result: {}, time: {}", integer, (end - start));
 //        Thread.sleep(15000L);
-        System.out.println("END");
+        log.info("END");
         return "END";
     }
 
     @GetMapping("/test1")
-    public String test1() throws InterruptedException {
+    public String test1(String key) throws InterruptedException {
         long start = System.currentTimeMillis();
-        Integer integer = new DemoCommand(provider, "1").execute();
+        DemoObservableCommand command = new DemoObservableCommand(provider, key);
+        final Integer[] result = new Integer[1];
+        command.observe().subscribe(new Observer<Integer>() {
+            @Override
+            public void onCompleted() {
+                log.info("onCompleted...");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onNext(Integer integer) {
+                result[0] = integer;
+                log.info("onNext:{}", integer);
+            }
+        });
         long end = System.currentTimeMillis();
-        log.info("result: {}, time: {}", integer, (end - start));
-        System.out.println("END");
+        log.info("result: {}, time: {}", result[0], (end - start));
+        log.info("End...");
         return "END";
     }
 

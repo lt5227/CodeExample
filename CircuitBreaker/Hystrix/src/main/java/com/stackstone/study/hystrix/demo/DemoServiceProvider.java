@@ -1,5 +1,6 @@
 package com.stackstone.study.hystrix.demo;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.swing.*;
@@ -19,25 +20,61 @@ import java.util.List;
  * @since 1.0.0
  */
 @Service
+@Slf4j
 public class DemoServiceProvider {
-    public int queryDocumentCount(String a) throws InterruptedException, IOException {
-        System.out.println("queryDocumentCount...");
-        File file = new File("E:\\skywalking-api.log");
-        FileWriter fileWriter = new FileWriter(file);
-        fileWriter.write("123456");
-        fileWriter.flush();
-        if (!"1".equals(a)) {
-            Thread.sleep(1000L);
+    FileWriter fileWriter = null;
+
+    public void close() {
+        log.info("关闭资源");
+        if (fileWriter != null) {
+            try {
+                fileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        fileWriter.write("456789");
-        fileWriter.flush();
-        fileWriter.close();
-        System.out.println("DemoServiceProvider");
+    }
+
+    public int queryDocumentCount(String a) throws InterruptedException, IOException {
+        log.info("queryDocumentCount...");
+        File file = new File("E:\\skywalking-api.log");
+        try {
+            fileWriter = new FileWriter(file);
+            fileWriter.write("123456");
+            fileWriter.flush();
+//            if (!"1".equals(a)) {
+//                Thread.sleep(60000L);
+//            }
+            long i = Integer.MAX_VALUE;
+            while (true) {
+                if (i-- == Integer.MIN_VALUE) {
+                    log.info("Demo....");
+                    break;
+                }
+            }
+            log.info("测试程序运行结束11111");
+            fileWriter.write("456789");
+            fileWriter.flush();
+            log.info("测试程序运行结束22222");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            log.info("finally....");
+            if (fileWriter != null) {
+                fileWriter.close();
+            }
+        }
+        log.info("DemoServiceProvider...");
         return 1000;
     }
 
     public List<Product> queryProducts(String sku) {
-        System.out.println("queryProducts....");
+        log.info("queryProducts....");
+        try {
+            Thread.sleep(5000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         List<Product> products = new ArrayList<>();
         if ("0".equals(sku)) {
             Product product = new Product();
